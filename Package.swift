@@ -5,6 +5,12 @@ import PackageDescription
 
 let package = Package(
     name: "Apollo",
+    platforms: [
+      .iOS(.v12),
+      .macOS(.v10_14),
+      .tvOS(.v12),
+      .watchOS(.v5)
+    ],
     products: [
     .library(
       name: "ApolloCore",
@@ -32,7 +38,7 @@ let package = Package(
       .upToNextMinor(from: "0.12.2")),
     .package(
       url: "https://github.com/daltoniam/Starscream",
-      .upToNextMinor(from: "3.1.1")),
+      .upToNextMinor(from: "4.0.4")),
     .package(
       url: "https://github.com/stencilproject/Stencil.git",
       .upToNextMinor(from: "0.14.0")),
@@ -63,7 +69,11 @@ let package = Package(
         .product(name: "Stencil", package: "Stencil"),
       ],
       exclude: [
-        "Info.plist"
+        "Info.plist",
+        "Frontend/JavaScript",
+      ],
+      resources: [
+        .copy("Frontend/JavaScript/dist/ApolloCodegenFrontend.bundle.js")
       ]),
     .target(
       name: "ApolloSQLite",
