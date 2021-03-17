@@ -8,7 +8,11 @@ extension String: JSONDecodable, JSONEncodable {
     case let int as Int:
         self = String(int)
     default:
+      if let stringValue = value as? String {
+        self = stringValue
+      } else {
         throw JSONDecodingError.couldNotConvert(value: value, to: String.self)
+      }
     }
   }
 
