@@ -6,12 +6,25 @@ extension String: JSONDecodable, JSONEncodable {
     case let string as String:
         self = string
     case let int as Int:
-        self = String(int)
+      self = String(int)
     default:
-      if let stringValue = value as? String {
-        self = stringValue
+      let string = value as? String
+      
+      if (string == nil) {
+        do {
+          let data1 = try JSONSerialization.data(withJSONObject: value, options: JSONSerialization.WritingOptions.prettyPrinted) // first of all convert json to the data
+          let convertedString = String(data: data1, encoding: String.Encoding.utf8) // the data will be converted to the string
+          if (convertedString == nil) {
+            throw JSONDecodingError.couldNotConvert(value: value, to: String.self)
+          } else {
+            self = convertedString ?? ""
+          }
+        } catch let myJSONError {
+          print(myJSONError)
+          throw JSONDecodingError.couldNotConvert(value: value, to: String.self)
+        }
       } else {
-        throw JSONDecodingError.couldNotConvert(value: value, to: String.self)
+        self = string ?? ""
       }
     }
   }
